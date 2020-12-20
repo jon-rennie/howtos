@@ -7,7 +7,7 @@ Based on article at https://dev.to/bowmanjd/using-podman-on-windows-subsystem-fo
 Starting point is to install Fedora 33 as a WSL distro as described in https://github.com/jon-rennie/howtos/blob/main/Install%20Fedora%2033%20for%20WSL%202.md
 
 
-### install podman, skopeo and buildah podman in Fedora 33 under WSL2
+### 01 - install podman, skopeo and buildah podman in Fedora 33 under WSL2
     [jon@jon-lenovo-m700 system32]$ sudo dnf install podman skopeo buildah which
     [jon@jon-lenovo-m700 ~]$ which buildah
     /usr/bin/buildah
@@ -16,8 +16,9 @@ Starting point is to install Fedora 33 as a WSL distro as described in https://g
     [jon@jon-lenovo-m700 ~]$ which podman
     /usr/bin/podman
 
-### workarounds for lack of systemd
+### 02 - workarounds for lack of systemd
 As WSL distros do not have or use systemd, there is no $XDG_RUNTIME_DIR available for podman to use for temporary files. We create this as needed by appending this to .bashrc:
+
     if [[ -z "$XDG_RUNTIME_DIR" ]]; then
         export XDG_RUNTIME_DIR=/run/user/$UID
         if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
@@ -28,21 +29,21 @@ As WSL distros do not have or use systemd, there is no $XDG_RUNTIME_DIR availabl
         fi
     fi
 
-### add containers.conf file to /etc/containers 
+### 03 - add containers.conf file to /etc/containers 
 Fedora version of podman does not create /etc/containers/containers.conf file. So we copy from /usr
     [jon@jon-lenovo-m700 ~]$ sudo cp /usr/share/containers/containers.conf /etc/containers/
 
-### remove reliance on systemd and journald
+### 04 - remove reliance on systemd and journald
 As WSL distros do not have or use systemd or journald we need to edit /etc/containers/containers.conf file to remove reliance on them
     [jon@jon-lenovo-m700 ~]$ sudo vi /etc/containers/containers.conf
-# change these vars to these values:
+#### change these vars to these values:
 1. cgroup_manager = "cgroupfs"
 2. events_logger = "file"
 
-### re-install shadow-utils
+### 05 - re-install shadow-utils
 [jon@jon-lenovo-m700 ~]$ sudo dnf reinstall shadow-utils
 
-### test it - use podman to pull down UBI8 image from Red Hat Registry and run it
+### 06 - test it - use podman to pull down UBI8 image from Red Hat Registry and run it
     [jon@jon-lenovo-m700 ~]$ podman run -it ubi8
     Resolved short name "ubi8" to a recorded short-name alias (origin: /etc/containers/registries.conf.d/shortnames.conf)
     Trying to pull registry.access.redhat.com/ubi8:latest...
@@ -58,14 +59,14 @@ As WSL distros do not have or use systemd or journald we need to edit /etc/conta
     Red Hat Enterprise Linux release 8.3 (Ootpa)
     [root@26b5c93e1bed /]# exit
 
-### test it - use skopeo to inspect a remote image 
+### 07 - test it - use skopeo to inspect a remote image 
     [jon@jon-lenovo-m700 ~]$ skopeo inspect docker://registry.access.redhat.com/ubi8/ubi-minimal
     {
         "Name": "registry.access.redhat.com/ubi8/ubi-minimal",
         "Digest": "sha256:4b9899b5c2906aae8e8fcd1012a5949e98bda68192c5e7bf6c1e171686c97d7a",
     ...
 
-### test it - create a ContainerFile
+### 08 - test it - create a ContainerFile
 Copy and paste this into a ContainerFile (example filename = ubi8-minimal-openjdk-containerfile)
     FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
     LABEL maintainer Jon Rennie <jon@jonrennie.com>
@@ -85,16 +86,16 @@ Copy and paste this into a ContainerFile (example filename = ubi8-minimal-openjd
     # Gives uid
     USER 1001
 
-### test it - use buildah to build a container image using that ContainerFile
+### 009 - test it - use buildah to build a container image using that ContainerFile
     [jon@jon-lenovo-m700 ~]$ buildah bud -t ubi8-minimal-openjdk8 -f ubi8-minimal-openjdk-containerfile
     ...
 
-### test it - make sure the new image is showing up in localhost container image store
+### 010 - test it - make sure the new image is showing up in localhost container image store
     [jon@jon-lenovo-m700 ~]$ buildah images
     REPOSITORY                                    TAG      IMAGE ID       CREATED              SIZE
     localhost/ubi8-minimal-openjdk8               latest   6d779d7da177   About a minute ago   263 MB
 
-# test it - run this new image from localhost
+### 011 - test it - run this new image from localhost
     [jon@jon-lenovo-m700 ~]$ podman run -it localhost/ubi8-minimal-openjdk8 /bin/bash
     bash-4.4$ uname -a
     Linux 505726a9dd79 4.19.128-microsoft-standard #1 SMP Tue Jun 23 12:58:10 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
