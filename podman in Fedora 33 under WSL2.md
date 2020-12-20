@@ -109,3 +109,4 @@ Copy and paste this into a ContainerFile (example filename = ubi8-minimal-openjd
     OpenJDK 64-Bit Server VM (build 25.275-b01, mixed mode)
     bash-4.4$ echo $JAVA_MAJOR_VERSION
     8
+    
