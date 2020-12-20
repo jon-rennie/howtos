@@ -42,6 +42,14 @@ Check it has imported
     [jon@jon-lenovo-m700 jon]$ id -u
     1000
     [jon@jon-lenovo-m700 jon]$ exit
+
+## 005 -set Windows Property to start as the user you created - uid 1000
+    PS C:\Users\jon> Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ DistributionName | Where-Object -Property DistributionName -eq Fedora-33  | Set-ItemProperty -Name DefaultUid -Value 1000
+
+## 006 - add COPR repo for wslu utilities and install wslu
+    PS C:\Users\jon> wsl -d Fedora-33
+    [jon@jon-lenovo-m700 jon]$ sudo dnf copr enable trustywolf/wslu
+    [jon@jon-lenovo-m700 jon]$ sudo dnf install wslu
     [jon@jon-lenovo-m700 jon]$ wslfetch
 
             /:-------------:\         Windows Subsystem for Linux (WSL2)
@@ -62,18 +70,7 @@ Check it has imported
     :------:://:-------------::
     :---------------------://
 
-## 005 -set Windows Property to start as the user you created - uid 1000
-    PS C:\Users\jon> Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ DistributionName | Where-Object -Property DistributionName -eq Fedora-33  | Set-ItemProperty -Name DefaultUid -Value 1000
-
-## 006 - add COPR repo for wslu utilities and install wslu
-    PS C:\Users\jon> wsl -d Fedora-33
-    [jon@jon-lenovo-m700 jon]$ sudo dnf copr enable trustywolf/wslu
-    [jon@jon-lenovo-m700 jon]$ sudo dnf install wslu
-
 ## 007 - create windows shortcut to start Fedora 33
-    PS C:\Users\jon> mkdir .config
-    PS C:\Users\jon> mkdir .config\wslu
-    PS C:\Users\jon> wsl -d Fedora-33
     [jon@jon-lenovo-m700 ~]$ wslusc -I
     [info] Welcome to wslu shortcut creator interactive mode.
     [input] Command (Without Parameter): /bin/bash

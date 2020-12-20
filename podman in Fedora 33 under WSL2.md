@@ -31,10 +31,12 @@ As WSL distros do not have or use systemd, there is no $XDG_RUNTIME_DIR availabl
 
 ### 03 - add containers.conf file to /etc/containers 
 Fedora version of podman does not create /etc/containers/containers.conf file. So we copy from /usr
+
     [jon@jon-lenovo-m700 ~]$ sudo cp /usr/share/containers/containers.conf /etc/containers/
 
 ### 04 - remove reliance on systemd and journald
 As WSL distros do not have or use systemd or journald we need to edit /etc/containers/containers.conf file to remove reliance on them
+
     [jon@jon-lenovo-m700 ~]$ sudo vi /etc/containers/containers.conf
 #### change these vars to these values:
 1. cgroup_manager = "cgroupfs"
@@ -68,6 +70,7 @@ As WSL distros do not have or use systemd or journald we need to edit /etc/conta
 
 ### 08 - test it - create a ContainerFile
 Copy and paste this into a ContainerFile (example filename = ubi8-minimal-openjdk-containerfile)
+
     FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
     LABEL maintainer Jon Rennie <jon@jonrennie.com>
 
@@ -96,6 +99,7 @@ Copy and paste this into a ContainerFile (example filename = ubi8-minimal-openjd
     localhost/ubi8-minimal-openjdk8               latest   6d779d7da177   About a minute ago   263 MB
 
 ### 011 - test it - run this new image from localhost
+
     [jon@jon-lenovo-m700 ~]$ podman run -it localhost/ubi8-minimal-openjdk8 /bin/bash
     bash-4.4$ uname -a
     Linux 505726a9dd79 4.19.128-microsoft-standard #1 SMP Tue Jun 23 12:58:10 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
