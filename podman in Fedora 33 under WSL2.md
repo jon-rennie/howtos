@@ -2,9 +2,9 @@
 
 This howto describes how to install and use podman, buildah and skopeo under Fedora 33 as a distribution in Windows Subsystem for Linux (WSL) version 2
 
-Based on article at https://dev.to/bowmanjd/using-podman-on-windows-subsystem-for-linux-wsl-58ji
+Based on [article by Jonathan Bowman](https://dev.to/bowmanjd/using-podman-on-windows-subsystem-for-linux-wsl-58ji)
 
-Starting point is to install Fedora 33 as a WSL distro as described in https://github.com/jon-rennie/howtos/blob/main/Install%20Fedora%2033%20for%20WSL%202.md
+Starting point is to install Fedora 33 as a WSL distro as described in [this howto](https://github.com/jon-rennie/howtos/blob/main/Install%20Fedora%2033%20for%20WSL%202.md)
 
 
 ### 01 - install podman, skopeo and buildah podman in Fedora 33 under WSL2

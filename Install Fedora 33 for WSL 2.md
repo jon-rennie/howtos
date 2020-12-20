@@ -2,7 +2,7 @@
 
 This howto describes how to add Fedora 33 as a distribution in Windows Subsystem for Linux (WSL) version 2
 
-Based on article at https://fedoramagazine.org/wsl-fedora-33/
+Based on article at [FedoraMagazine.org](https://fedoramagazine.org/wsl-fedora-33/)
 
 
 ## 001 - download a rootfs image
@@ -87,6 +87,4 @@ Then you can find shortcut on Desktop, modify .ico link, apply. Right click on s
 
 ## 008 - what next?
 
-Next up, try adding pdoman, buildah and skopeo to your Fedora 33 distro, so you can start building and running containers without needing to use docker or root privileges.
-
-Howto at https://github.com/jon-rennie/howtos/blob/main/podman%20in%20Fedora%2033%20under%20WSL2.md
+Next up, try adding pdoman, buildah and skopeo to your Fedora 33 distro, so you can start building and running containers without needing to use docker or root privileges. Use this [howto](https://github.com/jon-rennie/howtos/blob/main/podman%20in%20Fedora%2033%20under%20WSL2.md)
